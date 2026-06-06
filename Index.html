@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumos Premium LMS Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        darkCard: '#131926',
+                        lightBg: '#f8fafc',
+                        lightCard: '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-ui {
+            backdrop-filter: blur(14px) saturate(190%);
+            -webkit-backdrop-filter: blur(14px) saturate(190%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dark .glass-ui {
+            background-color: rgba(19, 25, 38, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .light .glass-ui {
+            background-color: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 dark:bg-darkBg dark:text-slate-100 light:bg-slate-50 light:text-slate-900 min-h-screen flex flex-col selection:bg-blue-500/30">
+
+    <header class="glass-ui sticky top-0 z-40 w-full px-6 py-4 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 light:border-slate-200">
+        <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl text-white shadow-lg shadow-blue-500/20">
+                <i data-lucide="cpu" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <span class="text-[10px] uppercase tracking-widest text-blue-500 font-black">LMS Platform</span>
+                <h1 class="text-lg font-bold tracking-tight">Lumos Core Engine</h1>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4 flex-wrap">
+            <div class="flex items-center bg-slate-950/80 dark:bg-slate-950/80 light:bg-slate-200 p-1 rounded-xl border border-slate-800 light:border-slate-300">
+                <span class="text-[10px] text-slate-500 uppercase tracking-wider px-2 font-bold hidden sm:inline">Actor Framework:</span>
+                <button onclick="changeActor('admin')" id="actor-admin" class="actor-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 text-slate-400">
+                    <i data-lucide="shield" class="w-3.5 h-3.5"></i> Admin
+                </button>
+                <button onclick="changeActor('teacher')" id="actor-teacher" class="actor-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 text-slate-400">
+                    <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i> Teacher
+                </button>
+                <button onclick="changeActor('student')" id="actor-student" class="actor-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 text-slate-400">
+                    <i data-lucide="user" class="w-3.5 h-3.5"></i> Student
+                </button>
+            </div>
+
+            <button onclick="toggleGlobalTheme()" class="p-2.5 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-800 light:bg-white light:border-slate-300 light:text-slate-800 transition-all">
+                <i data-lucide="sun" id="sun-icon" class="w-4 h-4 hidden dark:block"></i>
+                <i data-lucide="moon" id="moon-icon" class="w-4 h-4 block dark:hidden"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex-1 max-w-[1700px] w-full mx-auto p-4 md:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+        
+        <aside class="lg:col-span-1 flex flex-col gap-4">
+            <div class="glass-ui p-5 rounded-2xl flex items-center gap-3">
+                <div id="actor-avatar" class="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-white shadow-inner"></div>
+                <div>
+                    <h3 id="actor-display-name" class="font-bold text-sm"></h3>
+                    <p id="actor-display-role" class="text-[10px] uppercase font-mono tracking-wider text-slate-400 mt-0.5"></p>
+                </div>
+            </div>
+
+            <div class="glass-ui p-4 rounded-2xl flex flex-col gap-1">
+                <p class="text-[10px] uppercase tracking-widest font-black text-slate-500 px-2 mb-2">Module Management</p>
+                <nav id="sidebar-navigation-links" class="space-y-1"></nav>
+            </div>
+
+            <div class="glass-ui p-4 rounded-2xl bg-gradient-to-br from-blue-600/10 to-transparent border border-blue-500/20">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[9px] font-black text-blue-400 uppercase tracking-widest">Virtual Instruction</span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                </div>
+                <h4 class="font-bold text-xs text-slate-200 dark:text-slate-100 light:text-slate-800">Advanced Real-time Workspace Broadcast</h4>
+                <p class="text-[11px] text-slate-400 mt-1 mb-3">Zoom Unified Telemetry API Active.</p>
+                <button onclick="launchZoomInterface()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/20">
+                    <i data-lucide="video" class="w-3.5 h-3.5"></i> Launch Live Room
+                </button>
+            </div>
+        </aside>
+
+        <main class="lg:col-span-3 flex flex-col gap-5">
+            <section id="telemetry-ribbon" class="grid grid-cols-2 sm:grid-cols-4 gap-4"></section>
+
+            <section class="glass-ui p-6 rounded-2xl min-h-[550px] flex flex-col justify-between">
+                <div>
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/60 dark:border-slate-800/60 light:border-slate-200 pb-4 mb-6">
+                        <div>
+                            <h2 id="view-title" class="text-lg font-bold tracking-tight text-slate-100 dark:text-slate-100 light:text-slate-900"></h2>
+                            <p id="view-subtitle" class="text-xs text-slate-400 mt-0.5"></p>
+                        </div>
+                        <div id="view-action-container"></div>
+                    </div>
+
+                    <div id="primary-view-render-target" class="transition-all duration-200"></div>
+                </div>
+                <div class="text-[10px] font-mono text-center text-slate-600 mt-8">System State Context Verified &bull; Premium 2026 Engine Framework Engine</div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast-dock" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 max-w-sm w-full"></div>
+
+    <div id="modal-container" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden transition-all duration-300">
+        <div id="modal-content-card" class="glass-ui p-6 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-150"></div>
+    </div>
+
+    <script>
+        // CLIENT PERSISTED DATA INITIAL STATE SCHEMAS
+        const INITIAL_SYSTEM_DATA = {
+            classes: [
+                { code: 'MATH-1026', name: 'Mathematics Grade 10', section: 'Alpha Track', subject: 'Advanced Trigonometry', teacher: 'Alex Mercer', studentCount: 3 },
+                { code: 'AI-2026', name: 'Computer Science & AI architecture', section: 'Grad-Level Senior', subject: 'Neural Networks', teacher: 'Alex Mercer', studentCount: 2 }
+            ],
+            materials: [
+                { id: 'mat-1', classCode: 'MATH-1026', title: 'Calculus Foundations & Modeling.pdf', type: 'PDF', topic: 'Unit 1: Fundamentals', link: '#' },
+                { id: 'mat-2', classCode: 'AI-2026', title: 'Deep Dive: Large Language Architectures & Transformers', type: 'Video', topic: 'Unit 2: Transformer Layers', link: '#' }
+            ],
+            assignments: [
+                { id: 'asgn-1', classCode: 'MATH-1026', title: 'Fourier Matrix Dimensionality Mapping', due: '2026-06-15', topic: 'Unit 1: Fundamentals', criteria: { quality: '40%', calculation: '60%' }, submissions: [
+                    { student: 'Sarah Jenkins', file: 'sarah_fourier.pdf', content: 'Matrix calculations executed...', timestamp: '2026-06-05', graded: true, grade: 94, feedback: 'Phenomenal vector transformations.' },
+                    { student: 'David Kojo', file: 'kojo_math_v2.docx', content: 'Draft mapping matrices attached', timestamp: '2026-06-06', graded: false, grade: null, feedback: '' }
+                ]},
+                { id: 'asgn-2', classCode: 'AI-2026', title: 'Building custom tokenizer matrices from scratch', due: '2026-06-22', topic: 'Unit 2: Transformer Layers', criteria: { code: '50%', documentation: '50%' }, submissions: [] }
+            ],
+            accounts: [
+                { email: 'alex.mercer@lumos.edu', name: 'Alex Mercer', role: 'Teacher', status: 'Active' },
+                { email: 'sarah.j@lumos.edu', name: 'Sarah Jenkins', role: 'Student', status: 'Active' },
+                { email: 'david.k@lumos.edu', name: 'David Kojo', role: 'Student', status: 'Active' },
+                { email: 'admin@lumos.edu', name: 'System Core Director', role: 'Admin', status: 'Active' }
+            ],
+            securitySettings: { allowExternalSharing: false, enforcementMFA: true, customDomain: 'lumos.institution.edu' }
+        };
+
+        // Application Global Runtime Instance Configuration State
+        let systemDb = JSON.parse(localStorage.getItem('LUMOS_LMS_DB')) || INITIAL_SYSTEM_DATA;
+        let activeActor = 'teacher'; 
+        let activeView = 'classes';
+        let currentTheme = 'dark';
+
+        function saveDatabaseState() {
+            localStorage.setItem('LUMOS_LMS_DB', JSON.stringify(systemDb));
+        }
+
+        // DESIGN TOAST PIPE ARCHITECTURE
+        function showNotification(title, text, type = 'bell') {
+            const dock = document.getElementById('toast-dock');
+            const toastId = 'toast-' + Math.random().toString(36).substr(2, 9);
+            const card = document.createElement('div');
+            card.id = toastId;
+            card.className = "glass-ui p-4 rounded-xl flex gap-3 items-start border-l-4 border-l-blue-500 shadow-xl opacity-100 transition-all transform duration-300";
+            card.innerHTML = `
+                <div class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg"><i data-lucide="${type}" class="w-4 h-4"></i></div>
+                <div class="flex-1">
+                    <h5 class="font-bold text-xs text-slate-200 dark:text-slate-200 light:text-slate-900">${title}</h5>
+                    <p class="text-[11px] text-slate-400 mt-0.5">${text}</p>
+                </div>
+                <button onclick="document.getElementById('${toastId}').remove()" class="text-slate-500 hover:text-slate-400"><i data-lucide="x" class="w-3 h-3"></i></button>
+            `;
+            dock.appendChild(card);
+            lucide.createIcons();
+            setTimeout(() => { if(document.getElementById(toastId)) document.getElementById(toastId).remove(); }, 5000);
+        }
+
+        // MODAL TOGGLING ENGINE
+        function openModalStructure(htmlContent) {
+            const container = document.getElementById('modal-container');
+            const card = document.getElementById('modal-content-card');
+            card.innerHTML = htmlContent;
+            container.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModalStructure() {
+            document.getElementById('modal-container').classList.add('hidden');
+        }
+
+        // THEME TOGGLER
+        function toggleGlobalTheme() {
+            const htmlNode = document.documentElement;
+            if (htmlNode.classList.contains('dark')) {
+                htmlNode.classList.remove('dark');
+                htmlNode.classList.add('light');
+                currentTheme = 'light';
+            } else {
+                htmlNode.classList.remove('light');
+                htmlNode.classList.add('dark');
+                currentTheme = 'dark';
+            }
+        }
+
+        // SWITCH ACTOR STRATEGY MATRIX
+        function changeActor(actor) {
+            activeActor = actor;
+            document.querySelectorAll('.actor-btn').forEach(b => b.className = "actor-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 text-slate-400 hover:text-slate-200");
+            const activeBtn = document.getElementById(`actor-${actor}`);
+            activeBtn.className = "actor-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 text-white bg-blue-600 shadow-md shadow-blue-500/20";
+            
+            // Set dynamic sidebar profiles based on selected actor
+            const avatar = document.getElementById('actor-avatar');
+            const nameLbl = document.getElementById('actor-display-name');
+            const roleLbl = document.getElementById('actor-display-role');
+            
+            if (actor === 'admin') {
+                avatar.className = "w-11 h-11 rounded-xl flex items-center justify-center font-bold text-white bg-gradient-to-br from-red-500 to-orange-600 shadow-lg";
+                avatar.innerHTML = '<i data-lucide="shield" class="w-5 h-5"></i>';
+                nameLbl.innerText = "Director Administration";
+                roleLbl.innerText = "Root Administrator";
+                activeView = 'accounts';
+            } else if (actor === 'teacher') {
+                avatar.className = "w-11 h-11 rounded-xl flex items-center justify-center font-bold text-white bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg";
+                avatar.innerHTML = '<i data-lucide="graduation-cap" class="w-5 h-5"></i>';
+                nameLbl.innerText = "Alex Mercer";
+                roleLbl.innerText = "Senior Instructor";
+                activeView = 'classes';
+            } else if (actor === 'student') {
+                avatar.className = "w-11 h-11 rounded-xl flex items-center justify-center font-bold text-white bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg";
+                avatar.innerHTML = '<i data-lucide="user" class="w-5 h-5"></i>';
+                nameLbl.innerText = "Sarah Jenkins";
+                roleLbl.innerText = "Enrolled Student";
+                activeView = 'classes';
+            }
+
+            showNotification("Actor Switch Cleared", `Now accessing platform domain as ${actor.toUpperCase()}`, "shield-check");
+            renderNavigationMenu();
+            renderTelemetryRibbon();
+            renderPrimaryWorkspaceView();
+        }
+
+        // NAVIGATION RENDERING ENGINE
+        function renderNavigationMenu() {
+            const nav = document.getElementById('sidebar-navigation-links');
+            nav.innerHTML = '';
+            
+            const schema = {
+                admin: [
+                    { id: 'accounts', label: 'User Directory', icon: 'users' },
+                    { id: 'access', label: 'Access Control', icon: 'key-round' },
+                    { id: 'security', label: 'Security & Integrity', icon: 'shield-alert' },
+                    { id: 'usage', label: 'System Monitoring', icon: 'activity' }
+                ],
+                teacher: [
+                    { id: 'classes', label: 'Class Builder Hub', icon: 'folder-git' },
+                    { id: 'materials', label: 'Course Materials', icon: 'file-text' },
+                    { id: 'assignments', label: 'Assignments Desk', icon: 'clipboard-list' },
+                    { id: 'grading', label: 'Grading Framework', icon: 'bookmark-check' }
+                ],
+                student: [
+                    { id: 'classes', label: 'My Classes', icon: 'book-open' },
+                    { id: 'materials', label: 'Resource Repository', icon: 'files' },
+                    { id: 'assignments', label: 'Assignment Tracker', icon: 'check-square' },
+                    { id: 'grades', label: 'My Progress Sheet', icon: 'bar-chart-3' }
+                ]
+            };
+
+            schema[activeActor].forEach(item => {
+                const isActive = item.id === activeView;
+                const classStyles = isActive 
+                    ? "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-sm" 
+                    : "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 light:hover:bg-slate-200/50";
+                
+                nav.innerHTML += `
+                    <button onclick="navigateWorkspaceTo('${item.id}')" class="${classStyles}">
+                        <i data-lucide="${item.icon}" class="w-4 h-4"></i>
+                        <span>${item.label}</span>
+                    </button>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        function navigateWorkspaceTo(viewId) {
+            activeView = viewId;
+            renderNavigationMenu();
+            renderPrimaryWorkspaceView();
+        }
+
+        // TELEMETRY RIBBON COMPUTATION DATA GENERATOR
+        function renderTelemetryRibbon() {
+            const ribbon = document.getElementById('telemetry-ribbon');
+            ribbon.innerHTML = '';
+
+            let cards = [];
+            if (activeActor === 'admin') {
+                cards = [
+                    { label: 'Managed Profiles', val: `${systemDb.accounts.length} Profiles`, icon: 'users' },
+                    { label: 'Active Domains', val: '1 Institutional Pool', icon: 'network' },
+                    { label: 'MFA Status', val: systemDb.securitySettings.enforcementMFA ? 'Enforced' : 'Disabled', icon: 'lock' },
+                    { label: 'Data Integrity', val: 'Compliant (Audit)', icon: 'check-circle' }
+                ];
+            } else if (activeActor === 'teacher') {
+                const submissionCount = systemDb.assignments.reduce((acc, a) => acc + a.submissions.length, 0);
+                cards = [
+                    { label: 'Classes Running', val: `${systemDb.classes.length} Formations`, icon: 'book-markdown' },
+                    { label: 'Total Materials', val: `${systemDb.materials.length} Assets Published`, icon: 'file-text' },
+                    { label: 'Inbox Deliveries', val: `${submissionCount} Received`, icon: 'mail' },
+                    { label: 'Integrity Check', val: 'Originality Valid', icon: 'fingerprint' }
+                ];
+            } else if (activeActor === 'student') {
+                const totalAssigned = systemDb.assignments.length;
+                cards = [
+                    { label: 'My Enrolled Hubs', val: `${systemDb.classes.length} Active`, icon: 'bookmark' },
+                    { label: 'Tasks Assigned', val: `${totalAssigned} Open Tracks`, icon: 'alert-circle' },
+                    { label: 'Evaluations Back', val: '1 Sheet Returned', icon: 'award' },
+                    { label: 'Overall Progress', val: '94% Cumulative', icon: 'sparkles' }
+                ];
+            }
+
+            cards.forEach(c => {
+                ribbon.innerHTML += `
+                    <div class="glass-ui p-4 rounded-xl flex items-center gap-3">
+                        <div class="p-2.5 bg-blue-500/10 text-blue-400 rounded-xl"><i data-lucide="${c.icon}" class="w-4 h-4"></i></div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">${c.label}</p>
+                            <h4 class="text-sm font-bold text-slate-200 dark:text-slate-200 light:text-slate-900 mt-0.5">${c.val}</h4>
+                        </div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        // PRIMARY WORKING RE-RENDERING FRAMEWORK SWITCH
+        function renderPrimaryWorkspaceView() {
+            const title = document.getElementById('view-title');
+            const sub = document.getElementById('view-subtitle');
+            const actions = document.getElementById('view-action-container');
+            const target = document.getElementById('primary-view-render-target');
+            
+            target.innerHTML = '';
+            actions.innerHTML = '';
+
+            // -------------------------------------------------------------
+            // MODULE: WORKSPACE CLASSES
+            // -------------------------------------------------------------
+            if (activeView === 'classes') {
+                title.innerText = activeActor === 'student' ? "My Enrolled Classrooms" : "Class Builder & Curriculums";
+                sub.innerText = "Construct, deploy, and organize multi-tenant instructional spaces.";
+                
+                if (activeActor === 'teacher') {
+                    actions.innerHTML = `<button onclick="actionCreateClassForm()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-4 rounded-xl flex items-center gap-1.5 shadow-lg shadow-blue-500/10"><i data-lucide="plus" class="w-4 h-4"></i> Create New Class</button>`;
+                } else if (activeActor === 'student') {
+                    actions.innerHTML = `<button onclick="actionJoinClassForm()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-4 rounded-xl flex items-center gap-1.5 shadow-lg shadow-blue-500/10"><i data-lucide="hash" class="w-4 h-4"></i> Join Class via Code</button>`;
+                }
+
+                let html = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+                systemDb.classes.forEach(c => {
+                    html += `
+                        <div class="p-5 rounded-xl border border-slate-800 dark:border-slate-800 light:border-slate-200 bg-slate-900/30 hover:border-slate-700 dark:hover:border-slate-700 light:hover:border-slate-300 transition-all">
+                            <div class="flex items-start justify-between gap-2 mb-3">
+                                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">${c.code}</span>
+                                <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="users" class="w-3.5 h-3.5 text-blue-500"></i> ${c.studentCount} Active</span>
+                            </div>
+                            <h4 class="font-bold text-base text-slate-100 dark:text-slate-100 light:text-slate-900">${c.name}</h4>
+                            <p class="text-xs text-slate-400 mt-1">${c.subject} &bull; ${c.section}</p>
+                            <div class="mt-4 pt-3 border-t border-slate-800/60 light:border-slate-200 flex items-center justify-between">
+                                <span class="text-[11px] text-slate-500">Instructor: ${c.teacher}</span>
+                                <button onclick="showNotification('Entering Workspace','Accessing localized class channel architecture.','door-open')" class="text-xs text-blue-400 font-bold hover:underline flex items-center gap-0.5">Enter Room &rarr;</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                target.innerHTML = html;
+            }
+
+            // -------------------------------------------------------------
+            // MODULE: COURSE MATERIALS
+            // -------------------------------------------------------------
+            else if (activeView === 'materials') {
+                title.innerText = "Course Materials Repository";
+                sub.innerText = "Manage reading worksheets, lecture files, recorded video presentations, and web links.";
+
+                if (activeActor === 'teacher') {
+                    actions.innerHTML = `<button onclick="actionPublishMaterialForm()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-4 rounded-xl flex items-center gap-1.5"><i data-lucide="upload-cloud" class="w-4 h-4"></i> Upload Asset</button>`;
+                }
+
+                let html = `<div class="space-y-3">`;
+                systemDb.materials.forEach(m => {
+                    const icon = m.type === 'PDF' ? 'file-text' : 'play-circle';
+                    html += `
+                        <div class="p-4 rounded-xl border border-slate-800/70 light:border-slate-200 bg-slate-900/10 flex items-center justify-between hover:border-slate-700 light:hover:border-slate-300">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2.5 bg-slate-800 rounded-lg text-blue-400 light:bg-slate-200"><i data-lucide="${icon}" class="w-4 h-4"></i></div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-200 dark:text-slate-200 light:text-slate-900">${m.title}</h4>
+                                    <p class="text-[11px] text-slate-400 font-mono mt-0.5">${m.classCode} &bull; ${m.topic} &bull; Persistent Copy Available</p>
+                                </div>
+                            </div>
+                            <button onclick="window.open('${m.link}')" class="p-2 text-slate-400 hover:text-blue-400"><i data-lucide="download" class="w-4 h-4"></i></button>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                target.innerHTML = systemDb.materials.length ? html : `<p class="text-xs text-slate-400 text-center py-8">No learning materials have been posted to this channel yet.</p>`;
+            }
+
+            // -------------------------------------------------------------
+            // MODULE: ASSIGNMENTS TRACKER
+            // -------------------------------------------------------------
+            else if (activeView === 'assignments') {
+                title.innerText = "Assignment & Assessment Hub";
+                sub.innerText = "Create, distribute personalized copies, track due dates, and turn in task templates.";
+
+                if (activeActor === 'teacher') {
+                    actions.innerHTML = `<button onclick="actionCreateAssignmentForm()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-4 rounded-xl flex items-center gap-1.5"><i data-lucide="plus-circle" class="w-4 h-4"></i> Deploy Assignment Matrix</button>`;
+                }
+
+                let html = `<div class="space-y-4">`;
+                systemDb.assignments.forEach(a => {
+                    const matchedSubmission = a.submissions.find(s => s.student === 'Sarah Jenkins');
+                    html += `
+                        <div class="p-5 rounded-xl border border-slate-800 dark:border-slate-800 light:border-slate-200 bg-slate-900/20">
+                            <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
+                                <div>
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20 uppercase tracking-wider">${a.topic}</span>
+                                    <h4 class="font-bold text-base text-slate-200 dark:text-slate-200 light:text-slate-900 mt-1.5">${a.title}</h4>
+                                    <p class="text-xs text-slate-400 font-mono mt-0.5">${a.classCode} &bull; Due Date: ${a.due}</p>
+                                </div>
+                                <div>
+                                    ${activeActor === 'teacher' 
+                                        ? `<span class="text-xs font-mono font-bold text-blue-400 bg-blue-500/10 px-3 py-1 rounded-lg border border-blue-500/20">${a.submissions.length} Received Submissions</span>`
+                                        : matchedSubmission 
+                                            ? `<span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/20">Completed & Submitted</span>`
+                                            : `<span class="text-xs font-mono font-bold text-amber-500 bg-amber-500/10 px-3 py-1 rounded-lg border border-amber-500/20">Action Required</span>`
+                                    }
+                                </div>
+                            </div>
+                            
+                            <div class="bg-slate-950/40 p-3 rounded-lg border border-slate-800 text-[11px] mb-4 light:bg-slate-100 light:border-slate-200">
+                                <span class="font-bold text-slate-400">Standardized Rubric Weight Distribution Matrix:</span>
+                                <div class="flex gap-4 mt-1 font-mono text-slate-400">
+                                    ${Object.entries(a.criteria).map(([k, v]) => `<span>&bull; ${k.toUpperCase()}: ${v}</span>`).join('')}
+                                </div>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-800/60 light:border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                                <span class="text-xs text-slate-500 flex items-center gap-1"><i data-lucide="copy-check" class="w-3.5 h-3.5"></i> Independent Student Copy Workspace Provisioned.</span>
+                                ${activeActor === 'student' && !matchedSubmission
+                                    ? `<button onclick="actionSubmitAssignmentInterface('${a.id}')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-1.5 px-3.5 rounded-xl">Turn In Personal Workspace</button>`
+                                    : activeActor === 'student'
+                                        ? `<span class="text-xs font-bold text-slate-400">Score: ${matchedSubmission.graded ? matchedSubmission.grade + '%' : 'Pending Evaluation'}</span>`
+                                        : `<button onclick="navigateWorkspaceTo('grading')" class="text-xs text-blue-400 font-bold hover:underline">Open Evaluation Portal &rarr;</button>`
+                                }
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                target.innerHTML = html;
+            }
+
+            // -------------------------------------------------------------
+            // MODULE: GRADING FRAMEWORK (TEACHER SPECIFIC)
+            // -------------------------------------------------------------
+            else if (activeView === 'grading') {
+                title.innerText = "Grading Framework Ledger";
+                sub.innerText = "Evaluate student submissions, apply grading rubrics, annotate workflows, and return feedback.";
+                
+                let html = `<div class="space-y-4">`;
+                let trackingSubmissions = false;
+
+                systemDb.assignments.forEach(asgn => {
+                    asgn.submissions.forEach((subm, subIdx) => {
+                        trackingSubmissions = true;
+                        html += `
+                            <div class="p-5 rounded-xl border border-slate-800 light:border-slate-200 bg-slate-900/10 flex flex-col gap-3">
+                                <div class="flex flex-wrap items-start justify-between gap-2 border-b border-slate-800 pb-2 light:border-slate-200">
+                                    <div>
+                                        <h4 class="font-bold text-sm text-slate-200 dark:text-slate-200 light:text-slate-900">${asgn.title}</h4>
+                                        <p class="text-xs text-slate-400">Student Payload: <span class="text-blue-400 font-mono font-bold">${subm.student}</span> &bull; Submitted: ${subm.timestamp}</p>
+                                    </div>
+                                    <div>
+                                        ${subm.graded 
+                                            ? `<span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">Evaluated: ${subm.grade}%</span>`
+                                            : `<span class="text-xs font-mono font-bold text-red-400 bg-red-500/10 px-2.5 py-1 rounded border border-red-500/20">Pending Marks</span>`
+                                        }
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-slate-950/80 rounded border border-slate-800 text-xs font-mono text-slate-400 light:bg-slate-200 light:border-slate-300">
+                                    <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">Portfolio File: ${subm.file}</div>
+                                    "${subm.content}"
+                                </div>
+                                <div class="flex flex-wrap items-center justify-between gap-4 mt-1">
+                                    <p class="text-xs text-slate-400 italic">Feedback Logged: ${subm.feedback || 'None Written'}</p>
+                                    <button onclick="actionGradeSubmissionForm('${asgn.id}', '${subm.student}')" class="bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/20 font-bold text-xs py-1.5 px-3 rounded-lg transition-all">
+                                        Execute Rubric Grading Assessment
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                });
+                html += `</div>`;
+                target.innerHTML = trackingSubmissions ? html : `<p class="text-xs text-slate-400 text-center py-8">All incoming student assignment files are perfectly evaluated.</p>`;
+            }
+
+            // -------------------------------------------------------------
+            // MODULE: MY PROGRESS SHEET (STUDENT SPECIFIC)
+            // -------------------------------------------------------------
+            else if (activeView === 'grades') {
+                title.innerText = "Personal Academic Progress Sheet";
+                sub.innerText = "Track individual scores, verify feedback reports, and inspect rubric outcomes.";
+
+                let html = `<div class="space-y-3">`;
+                systemDb.assignments.forEach(a => {
+                    const subm = a.submissions.find(s => s.student === 'Sarah Jenkins');
+                    html += `
+                        <div class="p-4 rounded-xl border border-slate-800 light:border-slate-200 bg-slate-900/10 flex items-center justify-between flex-wrap gap-4">
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-200 dark:text-slate-200 light:text-slate-900">${a.title}</h4>
+                                <p class="text-xs text-slate-400 mt-0.5">Feedback Note: <span class="text-slate-300 italic">"${subm && subm.feedback ? subm.feedback : 'Waiting for evaluations to return.'}"</span></p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-mono font-black text-blue-400">${subm && subm.graded ? subm.grade + '%' : 'N/A'}</div>
+                                <span class="text-[10px] text-slate-500 uppercase tracking-wider font-bold">${subm && subm.graded ? 'Returned Score' : 'Unprocessed'}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                target.innerHTML = html;
+            }
+
+            // -------------------------------------------------------------
+            // MODULE: USER DIRECTORY DIRECT ARCHIVE (ADMIN SPECIFIC)
+            // -------------------------------------------------------------
+            else if (activeView === 'accounts') {
+                title.innerText = "Identity & User Accounts Directory";
+                sub.innerText = "Provision profile credentials, modify security contexts, reset passwords, or disable accounts.";
+                actions.innerHTML = `<button onclick="actionCreateUserForm()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-2 px-4 rounded-xl flex items-center gap-1.5"><i data-lucide="user-plus" class="w-4 h-4"></i> Create Account Node</button>`;
+
+                let html = `
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-800 light:border-slate-200 text-slate-400 font-mono">
+                                    <th class="pb-3 font-bold uppercase tracking-wider">User Node Account</th>
+                                    <th class="pb-3 font-bold uppercase tracking-wider">System Role</th>
+                                    <th class="pb-3 font-bold uppercase tracking-wider">Endpoint Identity Email</th>
+                                    <th class="pb-3 font-bold uppercase tracking-wider text-right">Actions Matrix</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/40 light:divide-slate-200">`;
+                
+                systemDb.accounts.forEach(u => {
+                    html += `
+                        <tr class="hover:bg-slate-900/10">
+                            <td class="py-3 font-bold text-slate-200 dark:text-slate-200 light:text-slate-900">${u.name}</td>
+                            <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-800 border border-slate-700 light:bg-slate-200 light:border-slate-300">${u.role}</span></td>
+                            <td class="py-3 font-mono text-slate-400">${u.email}</td>
+                            <td class="py-3 text-right">
+                                <button onclick="actionResetPasswordAdmin('${u.email}')" class="text-blue-400 hover:underline font-bold mr-3">Reset Pass</button>
+                                <button onclick="actionRemoveUserAdmin('${u.email}')" class="text-red-400 hover:underline font-bold">Revoke</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table></div>`;
+                target.innerHTML = html;
+            }
+
+            // -------------------------------------------------------------
+            // MODULE: SECURITY & POLICY COMPLIANCE (ADMIN SPECIFIC)
+            // -------------------------------------------------------------
+            else if (activeView === 'security') {
+                title.innerText = "Security Domain & Data Policies";
+                sub.innerText = "Enforce Multi-Factor Authentication protocols, configure cross-domain sharing, and audit system rules.";
+                
+                target.innerHTML = `
+                    <div class="max-w-md space-y-5 font-sans">
+                        <div class="flex items-center justify-between p-4 bg-slate-900/20 rounded-xl border border-slate-800 light:border-slate-200">
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-200 dark:text-slate-200 light:text-slate-900">Enforce Multi-Factor Authentication (MFA)</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Require multi-step user token assertion keys upon logon.</p>
+                            </div>
+                            <input type="checkbox" id="mfa-toggle" onchange="actionToggleMfaSetting()" ${systemDb.securitySettings.enforcementMFA ? 'checked' : ''} class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 bg-slate-800 border-slate-700">
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-slate-900/20 rounded-xl border border-slate-800 light:border-slate-200">
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-200 dark:text-slate-200 light:text-slate-900">Allow External Domain Sharing Pipeline</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Authorize file mapping out-of-network to exterior email addresses.</p>
+                            </div>
+                            <input type="checkbox" id="sharing-toggle" onchange="actionToggleSharingSetting()" ${systemDb.securitySettings.allowExternalSharing ? 'checked' : ''} class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 bg-slate-800 border-slate-700">
+                        </div>
+                        <div class="p-4 bg-slate-900/20 rounded-xl border border-slate-800 light:border-slate-200 space-y-2">
+                            <h4 class="text-xs font-bold text-slate-200 dark:text-slate-200 light:text-slate-900">Institutional Custom Root Domain Integration</h4>
+                            <input type="text" id="domain-input" value="${systemDb.securitySettings.customDomain}" class="w-full bg-slate-950 p-2 rounded-lg text-xs border border-slate-800 font-mono text-blue-400 light:bg-slate-100 light:border-slate-300 focus:outline-none focus:border-blue-500">
+                            <button onclick="actionUpdateDomainAdmin()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs py-1.5 px-3 rounded-lg w-full mt-1">Commit Root Routing Path</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // FALLBACK SYSTEM SAFEGUARD
+            else {
+                target.innerHTML = `
+                    <div class="p-12 border border-dashed border-slate-800 rounded-xl text-center">
+                        <div class="w-10 h-10 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center mx-auto mb-3"><i data-lucide="terminal" class="w-5 h-5"></i></div>
+                        <h4 class="font-bold text-xs text-slate-300">Analytical Telemetry Metric Logging View</h4>
+                        <p class="text-[11px] text-slate-500 max-w-xs mx-auto mt-1">Real-time usage patterns, storage maps, and active sessions are tracking smoothly inside memory blocks.</p>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        // =================================================================
+        // BACKEND CONTROLLERS / ACTIVE WORKFLOW EXECUTION MATRICES
+        // =================================================================
+
+        // WORKFLOW: TEACHER - CREATE CLASS
+        function actionCreateClassForm() {
+            openModalStructure(`
+                <h3 class="font-bold text-sm text-slate-100 dark:text-slate-100 light:text-slate-900 mb-4">Establish New Class Architecture</h3>
+                <form id="form-create-class" onsubmit="executeCreateClass(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Class Formation Name</label>
+                        <input type="text" required name="name" placeholder="e.g. Computer Science 101" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Subject Track</label>
+                        <input type="text" required name="subject" placeholder="e.g. Software Engineering" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Section Track Identifier</label>
+                        <input type="text" required name="section" placeholder="e.g. Grade 12 Advanced" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="flex gap-2 pt-2 justify-end">
+                        <button type="button" onclick="closeModalStructure()" class="text-xs font-semibold px-3 py-2 text-slate-400 hover:text-slate-200">Cancel</button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2 rounded-xl">Commit Class Code</button>
+                    </div>
+                </form>
+            `);
+        }
+        function executeCreateClass(e) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const generatedCode = fd.get('name').substring(0,3).toUpperCase() + "-" + Math.floor(1000 + Math.random() * 9000);
+            
+            systemDb.classes.push({
+                code: generatedCode,
+                name: fd.get('name'),
+                section: fd.get('section'),
+                subject: fd.get('subject'),
+                teacher: 'Alex Mercer',
+                studentCount: 0
+            });
+            saveDatabaseState();
+            closeModalStructure();
+            showNotification("Class Created", `Token array allocated at tracking key: ${generatedCode}`, "folder-plus");
+            renderTelemetryRibbon();
+            renderPrimaryWorkspaceView();
+        }
+
+        // WORKFLOW: STUDENT - JOIN CLASS
+        function actionJoinClassForm() {
+            openModalStructure(`
+                <h3 class="font-bold text-sm text-slate-100 dark:text-slate-100 light:text-slate-900 mb-2">Connect to Class Token</h3>
+                <p class="text-xs text-slate-400 mb-4">Input the verified institutional class identifier code.</p>
+                <form onsubmit="executeJoinClass(event)" class="space-y-3">
+                    <input type="text" required name="code" placeholder="e.g. MATH-1026" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs font-mono tracking-widest text-center text-blue-400 light:bg-slate-100 light:border-slate-300 focus:outline-none">
+                    <div class="flex gap-2 pt-2 justify-end">
+                        <button type="button" onclick="closeModalStructure()" class="text-xs font-semibold px-3 py-2 text-slate-400">Cancel</button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2 rounded-xl">Authorize Connection</button>
+                    </div>
+                </form>
+            `);
+        }
+        function executeJoinClass(e) {
+            e.preventDefault();
+            const code = new FormData(e.target).get('code').toUpperCase().trim();
+            const match = systemDb.classes.find(c => c.code === code);
+            if(match) {
+                match.studentCount++;
+                saveDatabaseState();
+                closeModalStructure();
+                showNotification("Enrollment Complete", `Synchronized seamlessly with room: ${match.name}`, "check-circle");
+                renderTelemetryRibbon();
+                renderPrimaryWorkspaceView();
+            } else {
+                alert("Authorization token path does not exist on institutional nodes.");
+            }
+        }
+
+        // WORKFLOW: TEACHER - POST MATERIAL
+        function actionPublishMaterialForm() {
+            let classOptions = systemDb.classes.map(c => `<option value="${c.code}">${c.name} (${c.code})</option>`).join('');
+            openModalStructure(`
+                <h3 class="font-bold text-sm text-slate-100 dark:text-slate-100 light:text-slate-900 mb-4">Upload Course Material</h3>
+                <form onsubmit="executePublishMaterial(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Target Class Hub Mapping</label>
+                        <select name="classCode" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">${classOptions}</select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Resource Item Document Title</label>
+                        <input type="text" required name="title" placeholder="e.g. Unit 2 Lecture Notes" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Resource Payload Format Type</label>
+                        <select name="type" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">
+                            <option value="PDF">PDF Worksheets / Slides</option>
+                            <option value="Video">Video Stream Presentation</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Topic Grouping Folder</label>
+                        <input type="text" required name="topic" placeholder="e.g. Unit 2: Deep Learning" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">
+                    </div>
+                    <div class="flex gap-2 pt-2 justify-end">
+                        <button type="button" onclick="closeModalStructure()" class="text-xs font-semibold px-3 py-2 text-slate-400">Cancel</button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2 rounded-xl">Publish Resource</button>
+                    </div>
+                </form>
+            `);
+        }
+        function executePublishMaterial(e) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            systemDb.materials.unshift({
+                id: 'mat-' + Date.now(),
+                classCode: fd.get('classCode'),
+                title: fd.get('title'),
+                type: fd.get('type'),
+                topic: fd.get('topic'),
+                link: '#'
+            });
+            saveDatabaseState();
+            closeModalStructure();
+            showNotification("Resource Array Deployed", "The material is instantly pushed onto tracking repositories.", "file-plus");
+            renderTelemetryRibbon();
+            renderPrimaryWorkspaceView();
+        }
+
+        // WORKFLOW: TEACHER - CREATE ASSIGNMENT
+        function actionCreateAssignmentForm() {
+            let classOptions = systemDb.classes.map(c => `<option value="${c.code}">${c.name} (${c.code})</option>`).join('');
+            openModalStructure(`
+                <h3 class="font-bold text-sm text-slate-100 dark:text-slate-100 light:text-slate-900 mb-4">Deploy Standardized Assignment Matrix</h3>
+                <form onsubmit="executeCreateAssignment(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Class Mapping target</label>
+                        <select name="classCode" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">${classOptions}</select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Task Title</label>
+                        <input type="text" required name="title" placeholder="e.g. Neural Architecture Design" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Due Deadline Date</label>
+                            <input type="date" required name="due" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Topic Classification</label>
+                            <input type="text" required name="topic" placeholder="e.g. Unit 2" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-800 pt-2 light:border-slate-200">
+                        <span class="block text-[10px] uppercase text-slate-400 font-black mb-2">Configure Rubric Parameters Criteria</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="critName" value="Technical Accuracy" class="bg-slate-950 p-2 border border-slate-800 text-xs rounded-xl light:bg-slate-100 light:border-slate-300">
+                            <input type="text" name="critWeight" value="100%" class="bg-slate-950 p-2 border border-slate-800 text-xs rounded-xl light:bg-slate-100 light:border-slate-300 font-mono">
+                        </div>
+                    </div>
+                    <div class="flex gap-2 pt-2 justify-end">
+                        <button type="button" onclick="closeModalStructure()" class="text-xs font-semibold px-3 py-2 text-slate-400">Cancel</button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2 rounded-xl">Deploy Matrix</button>
+                    </div>
+                </form>
+            `);
+        }
+        function executeCreateAssignment(e) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const crit = {};
+            crit[fd.get('critName')] = fd.get('critWeight');
+            
+            systemDb.assignments.unshift({
+                id: 'asgn-' + Date.now(),
+                classCode: fd.get('classCode'),
+                title: fd.get('title'),
+                due: fd.get('due'),
+                topic: fd.get('topic'),
+                criteria: crit,
+                submissions: []
+            });
+            saveDatabaseState();
+            closeModalStructure();
+            showNotification("Assignment Dispatched", "Personalized template partitions provisioned for all tracking accounts.", "clipboard-check");
+            renderTelemetryRibbon();
+            renderPrimaryWorkspaceView();
+        }
+
+        // WORKFLOW: STUDENT - SUBMIT ASSIGNMENT WORKSPACE
+        function actionSubmitAssignmentInterface(asgnId) {
+            const match = systemDb.assignments.find(a => a.id === asgnId);
+            openModalStructure(`
+                <h3 class="font-bold text-sm text-slate-100 dark:text-slate-100 light:text-slate-900 mb-2">Personal Workspace Copy: ${match.title}</h3>
+                <p class="text-xs text-slate-400 mb-4">Complete independent tasks here without altering other institutional portfolios.</p>
+                <form onsubmit="executeSubmitAssignment(event, '${asgnId}')" class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Mock File Upload Attachment Name</label>
+                        <input type="text" required name="file" value="sarah_workspace_submission.pdf" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 font-mono text-xs text-blue-400 light:bg-slate-100 light:border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Online Document Creation Workspace Editor</label>
+                        <textarea name="content" rows="4" required placeholder="Type direct structural solution logs..." class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-blue-500 light:bg-slate-100 light:border-slate-300 light:text-slate-900">Executed algorithm structures conform perfectly with core standard conditions requested.</textarea>
+                    </div>
+                    <div class="flex gap-2 pt-1 justify-end">
+                        <button type="button" onclick="closeModalStructure()" class="text-xs font-semibold px-3 py-2 text-slate-400">Cancel</button>
+                        <button type="submit" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md">Turn In File</button>
+                    </div>
+                </form>
+            `);
+        }
+        function executeSubmitAssignment(e, asgnId) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const match = systemDb.assignments.find(a => a.id === asgnId);
+            match.submissions.push({
+                student: 'Sarah Jenkins',
+                file: fd.get('file'),
+                content: fd.get('content'),
+                timestamp: new Date().toISOString().split('T')[0],
+                graded: false,
+                grade: null,
+                feedback: ''
+            });
+            saveDatabaseState();
+            closeModalStructure();
+            showNotification("Payload Submitted", "Your assignment workspace was locked and sent to instructor channels.", "send");
+            renderTelemetryRibbon();
+            renderPrimaryWorkspaceView();
+        }
+
+        // WORKFLOW: TEACHER - EVALUATE & GRADE REVIEWS
+        function actionGradeSubmissionForm(asgnId, studentName) {
+            const asgn = systemDb.assignments.find(a => a.id === asgnId);
+            const subm = asgn.submissions.find(s => s.student === studentName);
+            openModalStructure(`
+                <h3 class="font-bold text-sm text-slate-100 dark:text-slate-100 light:text-slate-900 mb-1">Execute Analytical Assessment Evaluation</h3>
+                <p class="text-xs text-slate-400 mb-4">Evaluating portfolio: ${studentName}</p>
+                <form onsubmit="executeGradeSubmission(event, '${asgnId}', '${studentName}')" class="space-y-4">
+                    <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-slate-400 light:bg-slate-100 light:border-slate-300">
+                        ${subm.content}
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Assign Numerical Marks Grade Value (0 - 100%)</label>
+                        <input type="number" required min="0" max="100" name="grade" value="${subm.grade || 90}" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 font-mono text-xs text-blue-400 light:bg-slate-100 light:border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Annotate Structured Instructor Feedback Comments</label>
+                        <textarea name="feedback" rows="3" required placeholder="Write clear metric descriptions..." class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">${subm.feedback || 'Exemplary execution. Standardized rubrics perfectly satisfied.'}</textarea>
+                    </div>
+                    <div class="flex gap-2 justify-end">
+                        <button type="button" onclick="closeModalStructure()" class="text-xs font-semibold px-3 py-2 text-slate-400">Cancel</button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2 rounded-xl">Commit Evaluation Ledger</button>
+                    </div>
+                </form>
+            `);
+        }
+        function executeGradeSubmission(e, asgnId, studentName) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            const asgn = systemDb.assignments.find(a => a.id === asgnId);
+            const subm = asgn.submissions.find(s => s.student === studentName);
+            
+            subm.grade = parseInt(fd.get('grade'));
+            subm.feedback = fd.get('feedback');
+            subm.graded = true;
+            
+            saveDatabaseState();
+            closeModalStructure();
+            showNotification("Grades Verified", `Assessment records pushed cleanly onto ${studentName} profiles.`, "award");
+            renderTelemetryRibbon();
+            renderPrimaryWorkspaceView();
+        }
+
+        // WORKFLOW: ADMIN - PROVISION DIRECT USER PROFILES
+        function actionCreateUserForm() {
+            openModalStructure(`
+                <h3 class="font-bold text-sm text-slate-100 dark:text-slate-100 light:text-slate-900 mb-4">Provision Account Identity Node</h3>
+                <form onsubmit="executeCreateUser(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Full Legal Name</label>
+                        <input type="text" required name="name" placeholder="John Doe" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Target Infrastructure Endpoint Email</label>
+                        <input type="email" required name="email" placeholder="j.doe@lumos.edu" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Functional Security Context Domain Role</label>
+                        <select name="role" class="w-full bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-200 light:bg-slate-100 light:border-slate-300 light:text-slate-900">
+                            <option value="Student">Student Access Role</option>
+                            <option value="Teacher">Teacher Access Role</option>
+                            <option value="Admin">System Administrator Role</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2 pt-2 justify-end">
+                        <button type="button" onclick="closeModalStructure()" class="text-xs font-semibold px-3 py-2 text-slate-400">Cancel</button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2 rounded-xl">Provision Identity</button>
+                    </div>
+                </form>
+            `);
+        }
+        function executeCreateUser(e) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            systemDb.accounts.push({
+                email: fd.get('email'),
+                name: fd.get('name'),
+                role: fd.get('role'),
+                status: 'Active'
+            });
+            saveDatabaseState();
+            closeModalStructure();
+            showNotification("Profile Active", `Identity directory records generated for: ${fd.get('name')}`, "user-plus");
+            renderTelemetryRibbon();
+            renderPrimaryWorkspaceView();
+        }
+
+        // WORKFLOW: ADMIN - SECURITY CONTROLS MANAGEMENT
+        function actionToggleMfaSetting() {
+            systemDb.securitySettings.enforcementMFA = document.getElementById('mfa-toggle').checked;
+            saveDatabaseState();
+            showNotification("Policy Registry Shift", `Multi-Factor token checks globally updated to ${systemDb.securitySettings.enforcementMFA}`, "shield");
+            renderTelemetryRibbon();
+        }
+        function actionToggleSharingSetting() {
+            systemDb.securitySettings.allowExternalSharing = document.getElementById('sharing-toggle').checked;
+            saveDatabaseState();
+            showNotification("Domain Permissions Adjusted", `External cryptographic key mappings set to ${systemDb.securitySettings.allowExternalSharing}`, "globe");
+        }
+        function actionUpdateDomainAdmin() {
+            systemDb.securitySettings.customDomain = document.getElementById('domain-input').value;
+            saveDatabaseState();
+            showNotification("DNS Root Updated", `System domain routing table mapped onto ${systemDb.securitySettings.customDomain}`, "server");
+        }
+        function actionResetPasswordAdmin(email) {
+            showNotification("MIP Reset Sequence Triggered", `Temporary configuration pass code credentials routed to ${email}`, "key");
+        }
+        function actionRemoveUserAdmin(email) {
+            if(confirm(`Confirm deletion profile trace for entity matching ${email}?`)) {
+                systemDb.accounts = systemDb.accounts.filter(a => a.email !== email);
+                saveDatabaseState();
+                showNotification("Profile Revoked", "Identity record removed completely from node clusters.", "trash-2");
+                renderTelemetryRibbon();
+                renderPrimaryWorkspaceView();
+            }
+        }
+
+        // ZOOM INTEGRATION EMBED SIMULATOR WINDOW
+        function launchZoomInterface() {
+            openModalStructure(`
+                <div class="text-center p-4">
+                    <div class="w-12 h-12 bg-blue-600 rounded-2xl text-white flex items-center justify-center mx-auto mb-3 animate-pulse shadow-lg shadow-blue-500/20"><i data-lucide="video" class="w-6 h-6"></i></div>
+                    <h3 class="font-bold text-sm text-slate-100 dark:text-slate-100 light:text-slate-900">Virtual Broadcast Chamber Online</h3>
+                    <p class="text-xs text-slate-400 max-w-xs mx-auto mt-1 mb-4">Establishing full webRTC connection channels with institutional domains. Cameras and presentation screens initialized.</p>
+                    <div class="p-3 bg-slate-950 rounded-xl text-left border border-slate-800 font-mono text-[10px] text-emerald-400 mb-4 light:bg-slate-100 light:border-slate-300">
+                        &gt; zoom_sdk_handshake: OK<br>
+                        &gt; encryption_stream: AES_256_ACTIVE<br>
+                        &gt; telemetry_link: connected_to_lumos_core
+                    </div>
+                    <button onclick="closeModalStructure()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold py-2 rounded-xl border border-slate-700 light:bg-slate-200 light:text-slate-800 light:border-slate-300">Disconnect Broadcast Stream</button>
+                </div>
+            `);
+        }
+
+        // BOOT ENGINE PIPELINE TRIGGER
+        window.onload = () => {
+            changeActor('teacher'); // Initializes default starting role
+        };
+    </script>
+</body>
+</html>
